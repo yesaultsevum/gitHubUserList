@@ -1,0 +1,37 @@
+.app-wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-content {
+  width: 500px;
+  height: 600px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.components-wrapper {
+  display: flex;
+  width: 2000px;
+  height: 94%;
+}
+
+.footer {
+  height: 6%;
+  display: flex;
+  justify-content: center;
+  background-color: #f5f6f8;
+  border-top: 1px solid #bebebe;
+}
+
+.move-back {
+  padding: 0 20px;
+  cursor: pointer;
+}
+
+.move-back:hover {
+  color: #656464;
+}
+

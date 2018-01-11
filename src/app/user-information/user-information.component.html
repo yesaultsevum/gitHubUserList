@@ -1,0 +1,28 @@
+<div class="component user-information-component">
+  <h2 class="title">USER DETAILS</h2>
+  <div class="user-details-content" *ngIf="currentUser">
+    <div class="user-info">
+      <div class="user-details-avatar">
+        <img [src]="currentUser.avatar_url" alt="avatar">
+      </div>
+      <div class="user-details-info">
+        <p class="details-item login">
+          <span class="details-item-label">Login:</span>
+          <span>{{ currentUser.login }}</span>
+        </p>
+        <p class="details-item full-name">
+          <span class="details-item-label">Name:</span>
+          <span>{{ currentUser.name }}</span>
+        </p>
+      </div>
+    </div>
+    <div class="user-details-repositories">
+      <span class="details-item-label repos-title">Repositories:</span>
+      <ul class="list repos-list">
+        <li class="list-item repos-item" *ngFor="let repos of currentUserRepositories" (click)="showReposInfo(repos)">
+          <span class="translate-item">{{ repos.name }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

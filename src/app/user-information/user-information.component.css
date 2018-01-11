@@ -1,0 +1,49 @@
+.user-info {
+  margin: 0 10px;
+  padding: 10px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  border-bottom: 1px solid #bebebe;
+}
+
+.user-details-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-details-avatar {
+  height: 100px;
+  margin-right: 20px;
+}
+
+.user-details-avatar img{
+  height: 100%;
+  border-radius: 50%;
+}
+
+.user-details-repositories {
+  display: flex;
+  flex-direction: column;
+}
+
+.repos-title {
+  padding: 5px;
+  text-align: center;
+}
+
+.repos-list {
+  overflow: auto;
+  list-style: none;
+}
+
+.repos-item {
+  padding: 5px;
+  cursor: pointer;
+  background-color: #fff;
+  margin: 5px 0;
+}
+
+.details-item {
+  margin: 5px 0;
+}

@@ -1,0 +1,27 @@
+<div class="component repository-information-component">
+  <h2 class="title">REPOSITORY INFORMATION</h2>
+  <div class="user-details-content flex-column" *ngIf="selectedRepos">
+    <div class="user-details-info m-sm">
+      <p class="details-item login">
+        <span class="details-item-label">Login:</span>
+        <span>{{ selectedRepos.owner.login }}</span>
+      </p>
+    </div>
+    <div class="branches flex-column">
+      <span class="details-item-label m-sm">Branches:</span>
+      <ul class="list branches-list">
+        <li class="list-item branches-item" *ngFor="let branche of selectedReposBranches">
+          <span>{{ branche.name }}</span>
+        </li>
+      </ul>
+    </div>
+    <div class="commits flex-column">
+      <span class="details-item-label m-sm">Commits:</span>
+      <ul class="list commits-list">
+        <li class="list-item commits-item" *ngFor="let commit of selectedReposCommits">
+          <span>{{ commit.commit.message }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
