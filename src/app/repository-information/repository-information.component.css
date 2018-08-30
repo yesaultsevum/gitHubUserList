@@ -1,3 +1,11 @@
 .branches {
   flex-shrink: 0;
 }
+
+.branches-list {
+  max-height: 200px;
+}
+
+.branches-list, .commits-list {
+  margin-left: 20px;
+}

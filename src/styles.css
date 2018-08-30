@@ -49,25 +49,25 @@ html, body {
   text-align: center;
 }
 
-.USER_LIST {
-  transition: transform .6s ease .02s;
-  transform: translate(0, 0);
-}
+/*.USER_LIST {*/
+  /*transition: transform .6s ease .02s;*/
+  /*transform: translate(0, 0);*/
+/*}*/
 
-.USER_DETAILS {
-  transition: transform .6s ease .02s;
-  transform: translate(-500px, 0);
-}
+/*.USER_DETAILS {*/
+  /*transition: transform .6s ease .02s;*/
+  /*transform: translate(-500px, 0);*/
+/*}*/
 
-.REPOSITORY_INFORMATION {
-  transition: transform .6s ease .02s;
-  transform: translate(-1000px, 0);
-}
+/*.REPOSITORY_INFORMATION {*/
+  /*transition: transform .6s ease .02s;*/
+  /*transform: translate(-1000px, 0);*/
+/*}*/
 
-.COMMITS {
-  transition: transform .6s ease .02s;
-  transform: translate(-1500px, 0);
-}
+/*.COMMITS {*/
+  /*transition: transform .6s ease .02s;*/
+  /*transform: translate(-1500px, 0);*/
+/*}*/
 
 .details-item-label {
   font-weight: bold;

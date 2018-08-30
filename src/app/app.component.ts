@@ -1,40 +1,45 @@
-import { Component, OnInit } from '@angular/core';
-import { AppDataManagementService } from './app-data-management.service';
+import {Component, OnInit} from '@angular/core';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import {trigger, transition} from "@angular/animations";
+
+import {slideLeft, slideRight} from "./_animations/router.animation";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  animations: [
+    trigger('routerAnimations', [
+      transition('userList => user', slideRight),
+      transition('user => repos', slideRight),
+      transition('repos => user', slideLeft),
+      transition('user => userList', slideLeft),
+    ])
+  ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+  route: string;
 
   constructor(
-    private AppDataManagementService: AppDataManagementService
+    private location: Location,
+    private router: Router
   ) {
-    this.activeClass = 'USER_LIST';
-  }
-
-  activeClass: string;
-
-  ngOnInit() {
-    this.AppDataManagementService.changeComponent.subscribe((activeComponent: string) => {
-      this.activeClass = activeComponent;
+    router.events.subscribe(() => {
+      this.route = location.path();
     });
   }
 
-  back = () => {
-    switch(this.activeClass){
-      case 'USER_DETAILS':
-        this.activeClass = 'USER_LIST';
-        break;
-      case 'REPOSITORY_INFORMATION':
-        this.activeClass = 'USER_DETAILS';
-        break;
-      default:
-        this.activeClass = 'USER_LIST';
-        break;
-    }
+  ngOnInit() {}
 
+  prepareRouteTransition(outlet) {
+    const animation = outlet.activatedRouteData['animation'] || {};
+    return animation['value'] || null;
+  }
+
+  back() {
+    this.location.back();
   }
 
 

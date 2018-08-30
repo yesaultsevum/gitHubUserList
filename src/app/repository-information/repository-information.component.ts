@@ -1,42 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { AppDataManagementService} from '../app-data-management.service';
-import { RequestsService } from '../requests.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RequestsService } from '../_services/requests.service';
+import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
+import { ActivatedRoute } from '@angular/router';
 
-import { IRepository } from '../interfaces/IRepository';
 
 @Component({
-  selector: 'repository-information',
+  selector: 'app-repository-information',
   templateUrl: './repository-information.component.html',
   styleUrls: ['./repository-information.component.css']
 })
-export class RepositoryInformationComponent implements OnInit {
+export class RepositoryInformationComponent implements OnInit, OnDestroy {
 
   constructor(
-    private RequestsService: RequestsService,
-    private AppDataManagementService: AppDataManagementService
-  ) { }
+    private requestsService: RequestsService,
+    private activateRoute: ActivatedRoute,
+  ) {
+    this.login = this.activateRoute.snapshot.params['login'];
+    this.reposName = this.activateRoute.snapshot.params['reposName'];
+  }
 
-  selectedRepos: IRepository;
-  selectedReposBranches: Array<Object>;
-  selectedReposCommits: Array<Object>;
+  login: string;
+  reposName: string;
+  branches: Array<Object>;
+  commits: Array<Object>;
+
+  private subscription: Subscription = new Subscription();
 
   ngOnInit() {
-    this.AppDataManagementService.changeRepos.subscribe((repos: IRepository) => {
+    const url = `https://api.github.com/repos/${this.login}/${this.reposName}/`;
+    this.subscription.add(
+        Observable.forkJoin([
+          this.requestsService.getReposBranches(url + 'branches'),
+          this.requestsService.getReposCommits(url + 'commits')
+        ])
+          .subscribe(
+            (res: Array<any>)  => {
+              this.branches = res[0];
+              this.commits = res[1];
+              return res;
+            },
+            err => { console.log(err.message); }
+          )
+      );
+  }
 
-      let branchesUrl = repos.branches_url.substring(0, repos.branches_url.indexOf('{'));
-      let commitsUrl = repos.commits_url.substring(0, repos.commits_url.indexOf('{'));
-      this.selectedRepos = repos;
-      Promise.all([this.RequestsService.gerReposBranches(branchesUrl), this.RequestsService.gerReposCommits(commitsUrl)])
-        .then((res: Array<any>) => {
-          this.selectedReposBranches = res[0];
-          this.selectedReposCommits = res[1];
-          return res;
-        })
-        .catch((err) => {
-          console.log(err);
-          return err;
-        })
-    });
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

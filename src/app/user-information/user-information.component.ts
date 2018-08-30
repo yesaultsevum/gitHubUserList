@@ -1,43 +1,48 @@
-import { Component, OnInit } from '@angular/core';
-import { AppDataManagementService} from '../app-data-management.service';
-import { RequestsService } from '../requests.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { RequestsService } from '../_services/requests.service';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
-import { IUser, IUserDetails } from '../interfaces/IUser';
-import { IRepository } from '../interfaces/IRepository';
+import { IUserDetails } from '../_interfaces/IUser';
+import { IRepository } from '../_interfaces/IRepository';
 
 @Component({
-  selector: 'user-information',
+  selector: 'app-user-information',
   templateUrl: './user-information.component.html',
   styleUrls: ['./user-information.component.css']
 })
-export class UserInformationComponent implements OnInit {
+export class UserInformationComponent implements OnInit, OnDestroy {
 
   constructor(
-    private RequestsService: RequestsService,
-    private AppDataManagementService: AppDataManagementService
+    private requestsService: RequestsService,
+    private activateRoute: ActivatedRoute
   ) { }
 
-  currentUser: IUserDetails;
-  currentUserRepositories: IRepository[];
+  userFullInfo: IUserDetails;
+  userRepositories: IRepository[];
+  private subscription: Subscription = new Subscription();
 
   ngOnInit() {
-    this.AppDataManagementService.changeUser.subscribe((user: IUser) => {
-      Promise.all([this.RequestsService.getUser(user.login), this.RequestsService.getUserPepos(user.repos_url)])
-        .then((res: Array<any>) => {
-          this.currentUser = res[0];
-          this.currentUserRepositories = res[1];
+
+    this.subscription.add(this.requestsService.getUser(this.activateRoute.snapshot.params['login'])
+      .map((user: IUserDetails) => {
+        this.userFullInfo = user;
+        return user;
+      })
+      .mergeMap((user) => this.requestsService.getUserPepos(user.repos_url))
+      .subscribe(
+        (res: IRepository[]) => {
+          this.userRepositories = res;
           return res;
-        })
-        .catch((err) => {
-          console.log(err);
-          return err;
-        })
-    });
+        },
+        (err) => { console.log(err.message); }
+      )
+    );
+
   }
 
-  public showReposInfo = (repos: IRepository) => {
-    this.AppDataManagementService.toggleActiveRepos(repos);
-    this.AppDataManagementService.toggleComponent('REPOSITORY_INFORMATION');
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

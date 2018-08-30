@@ -1,39 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
-import { AppDataManagementService} from '../app-data-management.service';
-import { RequestsService } from '../requests.service';
-import { IUser } from '../interfaces/IUser';
+
+import { RequestsService } from '../_services/requests.service';
+import { IUser } from '../_interfaces/IUser';
 
 @Component({
-  selector: 'user-list',
+  selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
 
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
 
   constructor(
-    private AppDataManagementService: AppDataManagementService,
-    private RequestsService: RequestsService
-  ) {
-
-  }
-
-  public showUserDetails = (user) => {
-    this.AppDataManagementService.toggleUser(user);
-    this.AppDataManagementService.toggleComponent('USER_DETAILS');
-  };
+    private requestsService: RequestsService,
+  ) { }
 
   userList: IUser[];
+  private subscription: Subscription = new Subscription();
 
   ngOnInit() {
-    this.RequestsService.getUsers()
-      .then((res : IUser[]) => {
-        this.userList = res;
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    this.subscription.add(this.requestsService.getUsers()
+      .subscribe(
+        (result: IUser[]) => { this.userList = result; },
+        err => { console.log(err.message); }
+      ));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

@@ -1,7 +1,9 @@
 <div class="component user-list-component">
   <h2 class="title">USER LIST</h2>
   <ul class="list user-list">
-    <li class="list-item user" *ngFor="let user of userList" (click)="showUserDetails(user)">
+    <li class="list-item user"
+        *ngFor="let user of userList"
+        [routerLink]="['../user', user.login]">
       <div class="avatar">
         <img [src]="user.avatar_url" alt="avatar">
       </div>

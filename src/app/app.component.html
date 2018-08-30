@@ -1,16 +1,12 @@
 <div class="app-wrapper">
   <div class="app-content">
-    <div class="components-wrapper" [ngClass]="activeClass">
-      <user-list></user-list>
-      <user-information></user-information>
-      <repository-information></repository-information>
+    <div class="components-wrapper" [@routerAnimations]="prepareRouteTransition(outlet)">
+      <router-outlet #outlet="outlet"></router-outlet>
     </div>
     <div class="footer">
-      <div *ngIf="activeClass !== 'USER_LIST'" class="move-back" title="Back" (click)="back()">
+      <div *ngIf="route !== '/userList'" class="move-back" title="Back" (click)="back()">
         <i class="fa fa-2x fa-caret-left" aria-hidden="true"></i>
       </div>
     </div>
   </div>
 </div>
-
-
